@@ -3,5 +3,18 @@ import React from "react";
 import "components/Button.scss";
 
 export default function Button(props) {
-   return <button>{props.children}</button>;
+   let buttonClass = "button";
+
+   if (props.confirm) {
+      buttonClass += " button--confirm";
+   }
+
+   if (props.danger) buttonClass += " button--danger";
+
+   return <button 
+      onClick={props.onClick} 
+      disabled={props.disabled}
+      className={buttonClass}>
+         {props.children}
+      </button>;
 }

@@ -13,6 +13,7 @@ import InterviewerList from "components/InterviewerList";
 import Appointment from "components/Appointment/index";
 import Header from "components/Appointment/Header";
 import Empty from "components/Appointment/Empty"
+import Show from "components/Appointment/Show"
 
 storiesOf("Button", module)
   .addParameters({
@@ -150,4 +151,10 @@ storiesOf("Appointment", module)
   />)
   .add("Empty", () => <Empty
     onAdd={action("add appt")}
+  />)
+  .add("Show", () => <Show
+    student="Namey name"
+    interviewer={interviewers[1]}
+    onEdit={action("onEdit func")}
+    onDelete={action("onDelete func")}
   />)

@@ -1,33 +1,20 @@
 import React, { useState } from "react";
 
 export default function useVisualMode(initial) {
-  const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial])
 
   const transition = (newMode, replace = false) => {
-    setMode(newMode)
-
-    const histCopy = [...history]
-    // if replace is true, remove last item of history before updating
-    replace && histCopy.pop()
-    histCopy.push(newMode)
-    setHistory(histCopy)
+    setHistory(prev => {
+      return replace ? [...prev.slice(0, -1), newMode] : [...prev, newMode]
+    })
   }
 
   const back = () => {
-    // Ignore back instruction if history is only one item
-    if (history.length === 1) return;
-
-    const histCopy = [...history]
-    histCopy.pop()
-    setHistory(histCopy)
-
-    const prev = histCopy[histCopy.length - 1];
-    setMode(prev)
+    setHistory(prev => prev.length === 1 ? [...prev] : [...prev.slice(0, -1)])
   }
 
   return {
-    mode,
+    mode: history[history.length - 1],
     transition,
     back
   }

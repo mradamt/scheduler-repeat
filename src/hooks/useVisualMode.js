@@ -7,20 +7,20 @@ export default function useVisualMode(initial) {
   const transition = newMode => {
     setMode(newMode)
 
-    const updated = [...history]
-    updated.push(newMode)
-    setHistory(updated)
+    const histCopy = [...history]
+    histCopy.push(newMode)
+    setHistory(histCopy)
   }
 
   const back = () => {
     // Ignore back instruction if history is only one item
     if (history.length === 1) return;
 
-    const updated = [...history]
-    updated.pop()
-    setHistory(updated)
+    const histCopy = [...history]
+    histCopy.pop()
+    setHistory(histCopy)
 
-    const prev = updated[updated.length - 1];
+    const prev = histCopy[histCopy.length - 1];
     setMode(prev)
   }
 

@@ -4,10 +4,12 @@ export default function useVisualMode(initial) {
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial])
 
-  const transition = newMode => {
+  const transition = (newMode, replace = false) => {
     setMode(newMode)
 
     const histCopy = [...history]
+    // if replace is true, remove last item of history before updating
+    replace && histCopy.pop()
     histCopy.push(newMode)
     setHistory(histCopy)
   }

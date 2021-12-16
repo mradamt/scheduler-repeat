@@ -33,7 +33,7 @@ export default function Appointment(props) {
       />}
       
       {mode === empty && <Empty 
-        onAdd={() => console.log('onAdd func')}
+        onAdd={() => transition(form)}
       />}
       
       {mode === error && <Error 

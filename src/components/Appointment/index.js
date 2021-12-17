@@ -57,8 +57,8 @@ export default function Appointment(props) {
       />}
       {mode === show && <Show
         student={props.interview.student}
-        onEdit={() => console.log("onEdit func")}
         interviewer={findInterviewer(props.interview.interviewer)}
+        onEdit={() => transition(edit)}
         onDelete={() => console.log("onDelete func")}
       />}
       {mode === status && <Status

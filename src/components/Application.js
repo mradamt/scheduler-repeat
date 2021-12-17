@@ -20,6 +20,7 @@ export default function Application(props) {
 
   const dailyAppointments = getAppointmentsForDay(state, state.day)
   const dailyInterviewersList = getInterviewersForDay(state, state.day)
+  const bookInterview = (id, interview) => console.log(id, interview);
 
   useEffect(() => {
     Promise.all([
@@ -65,6 +66,7 @@ export default function Application(props) {
                 key={appt.id} 
                 {...appt} 
                 dailyInterviewersList={dailyInterviewersList}
+                bookInterview={bookInterview}
               />
           ))}
           <Appointment key="last" time="5pm" />

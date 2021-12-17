@@ -39,14 +39,14 @@ export default function Appointment(props) {
       {mode === create && <Form 
         interviewers={props.dailyInterviewersList}
         onSave={() => console.log("onSave func")}
-        onCancel={() => console.log("onCancel func")}
+        onCancel={() => back()}
       />}
       {mode === edit && <Form 
         student={props.interview.student}
         interviewer={props.interview.interviewer}
         interviewers={props.dailyInterviewersList}
         onSave={() => console.log("onSave func")}
-        onCancel={() => console.log("onCancel func")}
+        onCancel={() => back()}
       />}
       {mode === empty && <Empty 
         onAdd={() => transition(create)}

@@ -27,7 +27,6 @@ export default function Application(props) {
       axios.get('/api/appointments'),
       axios.get('/api/interviewers'),
     ]).then((all) => {
-      console.log('all[1].data:', all[1].data);
       setState(prev => ({
         ...prev, 
         days: all[0].data, 
@@ -65,7 +64,8 @@ export default function Application(props) {
               <Appointment 
                 key={appt.id} 
                 {...appt} 
-                interviewers={dailyInterviewersList} 
+                interviewers={state.interviewers}
+                dailyInterviewersList={dailyInterviewersList}
               />
           ))}
           <Appointment key="last" time="5pm" />

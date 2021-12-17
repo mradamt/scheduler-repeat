@@ -42,15 +42,15 @@ export default function Appointment(props) {
       
       {mode === form && <Form 
         student="hardcoded Form student name"
-        interviewer={3}
-        interviewers={props.interviewers}
+        interviewer={props.interview && props.interviewers[props.interview.interviewer]}
+        interviewers={props.dailyInterviewersList}
         onSave={() => console.log("onSave func")}
         onCancel={() => console.log("onCancel func")}
       />}
       
       {mode === show && <Show
         student={props.interview.student}
-        interviewer={props.interview.interviewer}
+        interviewer={props.interviewers[props.interview.interviewer]}
         onEdit={() => console.log("onEdit func")}
         onDelete={() => console.log("onDelete func")}
       />}

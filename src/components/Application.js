@@ -64,7 +64,6 @@ export default function Application(props) {
               <Appointment 
                 key={appt.id} 
                 {...appt} 
-                interviewers={state.interviewers}
                 dailyInterviewersList={dailyInterviewersList}
               />
           ))}

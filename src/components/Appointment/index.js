@@ -23,6 +23,10 @@ export default function Appointment(props) {
 
   const { mode, transition, back } = useVisualMode(props.interview ? show : empty)
   
+  const findInterviewer = id => {
+    return props.dailyInterviewersList.find(interviewerObj => id === interviewerObj.id)
+  }
+
   return (
     <article className="appointment">
       <Header time={props.time} />
@@ -39,7 +43,7 @@ export default function Appointment(props) {
       />}
       {mode === edit && <Form 
         student={props.interview.student}
-        interviewer={props.interviewers[props.interview.interviewer].id}
+        interviewer={props.interview.interviewer}
         interviewers={props.dailyInterviewersList}
         onSave={() => console.log("onSave func")}
         onCancel={() => console.log("onCancel func")}
@@ -53,8 +57,8 @@ export default function Appointment(props) {
       />}
       {mode === show && <Show
         student={props.interview.student}
-        interviewer={props.interviewers[props.interview.interviewer]}
         onEdit={() => console.log("onEdit func")}
+        interviewer={findInterviewer(props.interview.interviewer)}
         onDelete={() => console.log("onDelete func")}
       />}
       {mode === status && <Status

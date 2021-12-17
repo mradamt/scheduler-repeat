@@ -56,7 +56,7 @@ export default function Appointment(props) {
         student={props.interview.student}
         interviewer={props.interview.interviewer}
         interviewers={props.dailyInterviewersList}
-        onSave={() => console.log("onSave func")}
+        onSave={save}
         onCancel={() => back()}
       />}
       {mode === empty && <Empty 

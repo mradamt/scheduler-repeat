@@ -20,7 +20,24 @@ export default function Application(props) {
 
   const dailyAppointments = getAppointmentsForDay(state, state.day)
   const dailyInterviewersList = getInterviewersForDay(state, state.day)
-  const bookInterview = (id, interview) => console.log(id, interview);
+  const bookInterview = (id, interview) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: {...interview}
+    }
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    }
+    const newState = {
+      ...state,
+      appointments: appointments
+    }
+    return axios.put(`/api/appointments/${id}`, appointment)
+      .then((res, rej) => {
+      setState(newState)
+    })
+  };
 
   useEffect(() => {
     Promise.all([

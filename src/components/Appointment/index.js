@@ -32,7 +32,10 @@ export default function Appointment(props) {
       student: name,
       interviewer
     }
+    transition(saving)
     props.bookInterview(props.id, interview)
+      .then((res, rej) => transition(show))
+      .catch(err => console.log(err))
   }
 
   return (

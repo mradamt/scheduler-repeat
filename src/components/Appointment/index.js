@@ -19,7 +19,7 @@ export default function Appointment(props) {
   const empty = "empty";
   const error = "error";
   const show = "show";
-  const status = "status";
+  const saving = "saving";
 
   const { mode, transition, back } = useVisualMode(props.interview ? show : empty)
   
@@ -72,8 +72,8 @@ export default function Appointment(props) {
         onEdit={() => transition(edit)}
         onDelete={() => console.log("onDelete func")}
       />}
-      {mode === status && <Status
-        message="hardcoded Status message"
+      {mode === saving && <Status
+        message="... saving"
       />}
       
     </article>

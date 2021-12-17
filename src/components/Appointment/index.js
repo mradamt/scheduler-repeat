@@ -14,9 +14,10 @@ import Status from "./Status";
 
 export default function Appointment(props) {
   const confirm = "confirm";
+  const create = "create";
+  const edit = "edit";
   const empty = "empty";
   const error = "error";
-  const form = "form";
   const show = "show";
   const status = "status";
 
@@ -31,30 +32,31 @@ export default function Appointment(props) {
         onConfirm={() => console.log("onConfirm func")}
         onCancel={() => console.log("onCancel func")}
       />}
-      
-      {mode === empty && <Empty 
-        onAdd={() => transition(form)}
-      />}
-      
-      {mode === error && <Error 
-        message="hardcoded Error message"
-        onClose={() => console.log("onClose func")}      />}
-      
-      {mode === form && <Form 
-        student="hardcoded Form student name"
-        interviewer={props.interview && props.interviewers[props.interview.interviewer]}
+      {mode === create && <Form 
         interviewers={props.dailyInterviewersList}
         onSave={() => console.log("onSave func")}
         onCancel={() => console.log("onCancel func")}
       />}
-      
+      {mode === edit && <Form 
+        student={props.interview.student}
+        interviewer={props.interviewers[props.interview.interviewer].id}
+        interviewers={props.dailyInterviewersList}
+        onSave={() => console.log("onSave func")}
+        onCancel={() => console.log("onCancel func")}
+      />}
+      {mode === empty && <Empty 
+        onAdd={() => transition(create)}
+      />}
+      {mode === error && <Error 
+        message="hardcoded Error message"
+        onClose={() => console.log("onClose func")}      
+      />}
       {mode === show && <Show
         student={props.interview.student}
         interviewer={props.interviewers[props.interview.interviewer]}
         onEdit={() => console.log("onEdit func")}
         onDelete={() => console.log("onDelete func")}
       />}
-    
       {mode === status && <Status
         message="hardcoded Status message"
       />}

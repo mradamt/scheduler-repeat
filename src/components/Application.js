@@ -25,6 +25,13 @@ export default function Application(props) {
     return axios.put(`/api/appointments/${id}`, newAppointment).then(() => {setState(newState)})
   };
 
+  const deleteInterview = (id) => {
+    const newAppointment = {...state.appointments[id], interview: null}
+    const newAppointments = {...state.appointments, [id]: newAppointment}
+    const newState = {...state, appointments: newAppointments}
+    return axios.delete(`/api/appointments/${id}`).then(() => {setState(newState)})
+  }
+
   useEffect(() => {
     Promise.all([
       axios.get('/api/days'),
@@ -70,6 +77,7 @@ export default function Application(props) {
                 {...appt} 
                 dailyInterviewersList={dailyInterviewersList}
                 bookInterview={bookInterview}
+                deleteInterview={deleteInterview}
               />
           ))}
           <Appointment key="last" time="5pm" />

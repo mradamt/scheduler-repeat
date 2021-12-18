@@ -15,6 +15,7 @@ import Status from "./Status";
 export default function Appointment(props) {
   const confirm = "confirm";
   const create = "create";
+  const deleting = "deleting";
   const edit = "edit";
   const empty = "empty";
   const error = "error";
@@ -38,19 +39,29 @@ export default function Appointment(props) {
       .catch(err => console.log(err))
   }
 
+  const delAppointment = () => {
+    transition(deleting)
+    props.deleteInterview(props.id)
+      .then((res, rej) => transition(empty))
+      .catch((err) => console.log(err))
+  }
+
   return (
     <article className="appointment">
       <Header time={props.time} />
 
       {mode === confirm && <Confirm
-        message="hardcoded Confirm message"
-        onConfirm={() => console.log("onConfirm func")}
-        onCancel={() => console.log("onCancel func")}
+        message="Confirm delete?"
+        onConfirm={delAppointment}
+        onCancel={() => back()}
       />}
       {mode === create && <Form 
         interviewers={props.dailyInterviewersList}
         onSave={save}
         onCancel={() => back()}
+      />}
+      {mode === deleting && <Status
+        message="...deleting"
       />}
       {mode === edit && <Form 
         student={props.interview.student}
@@ -70,7 +81,7 @@ export default function Appointment(props) {
         student={props.interview.student}
         interviewer={findInterviewer(props.interview.interviewer)}
         onEdit={() => transition(edit)}
-        onDelete={() => console.log("onDelete func")}
+        onDelete={() => transition(confirm)}
       />}
       {mode === saving && <Status
         message="... saving"

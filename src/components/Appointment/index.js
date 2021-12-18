@@ -13,15 +13,15 @@ import Show from "./Show";
 import Status from "./Status";
 
 export default function Appointment(props) {
-  const confirm = "confirm";
-  const create = "create";
-  const deleting = "deleting";
-  const error_onDelete = "error_onDelete";
-  const edit = "edit";
   const empty = "empty";
   const show = "show";
-  const saving = "saving";
+  const create = "create";
+  const edit = "edit";
+  const confirm = "confirm";
+  const status_saving = "status_saving";
+  const status_deleting = "status_deleting";
   const error_onSave = "error_onSave"
+  const error_onDelete = "error_onDelete";
 
   const { mode, transition, back } = useVisualMode(props.interview ? show : empty)
   
@@ -34,7 +34,7 @@ export default function Appointment(props) {
       student: name,
       interviewer
     }
-    transition(saving)
+    transition(status_saving)
     props.bookInterview(props.id, interview)
       .then(() => transition(show))
       .catch(err => {
@@ -44,7 +44,7 @@ export default function Appointment(props) {
   }
 
   const delAppointment = () => {
-    transition(deleting, true)
+    transition(status_deleting, true)
     props.deleteInterview(props.id)
       .then(() => transition(empty))
       .catch((err) => {
@@ -57,30 +57,6 @@ export default function Appointment(props) {
     <article className="appointment">
       <Header time={props.time} />
 
-      {mode === confirm && <Confirm
-        message="Confirm delete?"
-        onConfirm={delAppointment}
-        onCancel={() => back()}
-      />}
-      {mode === create && <Form 
-        interviewers={props.dailyInterviewersList}
-        onSave={save}
-        onCancel={() => back()}
-      />}
-      {mode === deleting && <Status
-        message="...deleting"
-      />}
-      {mode === error_onDelete && <Error 
-        message="Deletion failed"
-        onClose={() => back()}
-      />}
-      {mode === edit && <Form 
-        student={props.interview.student}
-        interviewer={props.interview.interviewer}
-        interviewers={props.dailyInterviewersList}
-        onSave={save}
-        onCancel={() => back()}
-      />}
       {mode === empty && <Empty 
         onAdd={() => transition(create)}
       />}
@@ -90,14 +66,37 @@ export default function Appointment(props) {
         onEdit={() => transition(edit)}
         onDelete={() => transition(confirm)}
       />}
-      {mode === saving && <Status
+      {mode === create && <Form 
+        interviewers={props.dailyInterviewersList}
+        onSave={save}
+        onCancel={() => back()}
+      />}
+      {mode === edit && <Form 
+        student={props.interview.student}
+        interviewer={props.interview.interviewer}
+        interviewers={props.dailyInterviewersList}
+        onSave={save}
+        onCancel={() => back()}
+      />}
+      {mode === confirm && <Confirm
+        message="Confirm delete?"
+        onConfirm={delAppointment}
+        onCancel={() => back()}
+      />}
+      {mode === status_saving && <Status
         message="... saving"
-        />}
+      />}
+      {mode === status_deleting && <Status
+        message="...deleting"
+      />}
       {mode === error_onSave && <Error 
         message="Save failed"
         onClose={() => back()}
       />}
-      
+      {mode === error_onDelete && <Error 
+        message="Deletion failed"
+        onClose={() => back()}
+      />}
     </article>
   )
 }

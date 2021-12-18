@@ -16,12 +16,12 @@ export default function Appointment(props) {
   const confirm = "confirm";
   const create = "create";
   const deleting = "deleting";
-  const deletionError = "deletionError";
+  const error_onDelete = "error_onDelete";
   const edit = "edit";
   const empty = "empty";
   const show = "show";
   const saving = "saving";
-  const savingError = "savingError"
+  const error_onSave = "error_onSave"
 
   const { mode, transition, back } = useVisualMode(props.interview ? show : empty)
   
@@ -36,20 +36,20 @@ export default function Appointment(props) {
     }
     transition(saving)
     props.bookInterview(props.id, interview)
-      .then((res, rej) => transition(show))
+      .then(() => transition(show))
       .catch(err => {
         console.log(err)
-        transition(savingError)
+        transition(error_onSave, true)
       })
   }
 
   const delAppointment = () => {
-    transition(deleting)
+    transition(deleting, true)
     props.deleteInterview(props.id)
-      .then((res, rej) => transition(empty))
+      .then(() => transition(empty))
       .catch((err) => {
         console.log(err)
-        transition(deletionError)
+        transition(error_onDelete, true)
       })
   }
 
@@ -70,9 +70,9 @@ export default function Appointment(props) {
       {mode === deleting && <Status
         message="...deleting"
       />}
-      {mode === deletionError && <Error 
+      {mode === error_onDelete && <Error 
         message="Deletion failed"
-        onClose={() => transition(show, true)}
+        onClose={() => back()}
       />}
       {mode === edit && <Form 
         student={props.interview.student}
@@ -93,9 +93,9 @@ export default function Appointment(props) {
       {mode === saving && <Status
         message="... saving"
         />}
-      {mode === savingError && <Error 
+      {mode === error_onSave && <Error 
         message="Save failed"
-        onClose={() => transition(empty, true)}
+        onClose={() => back()}
       />}
       
     </article>

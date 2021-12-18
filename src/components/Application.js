@@ -16,6 +16,15 @@ export default function Application(props) {
   })
 
   const dailyAppointments = getAppointmentsForDay(state, state.day)
+    .map(appointment => (
+      <Appointment 
+        key={appointment.id} 
+        {...appointment} 
+        dailyInterviewersList={dailyInterviewersList}
+        bookInterview={bookInterview}
+        deleteInterview={deleteInterview}
+      />
+    ))
   const dailyInterviewersList = getInterviewersForDay(state, state.day)
 
   const bookInterview = (id, interview) => {
@@ -58,8 +67,8 @@ export default function Application(props) {
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
           <DayList
-            days={state.days}
             day={state.day}
+            days={state.days}
             setDay={day => setState({...state, day: day})}
           />
         </nav>
@@ -71,15 +80,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         <ul>
-          {dailyAppointments.map(appt => (
-              <Appointment 
-                key={appt.id} 
-                {...appt} 
-                dailyInterviewersList={dailyInterviewersList}
-                bookInterview={bookInterview}
-                deleteInterview={deleteInterview}
-              />
-          ))}
+          {dailyAppointments}
           <Appointment key="last" time="5pm" />
         </ul>
       </section>

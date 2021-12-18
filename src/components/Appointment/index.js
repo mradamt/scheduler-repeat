@@ -16,11 +16,12 @@ export default function Appointment(props) {
   const confirm = "confirm";
   const create = "create";
   const deleting = "deleting";
+  const deletionError = "deletionError";
   const edit = "edit";
   const empty = "empty";
-  const error = "error";
   const show = "show";
   const saving = "saving";
+  const savingError = "savingError"
 
   const { mode, transition, back } = useVisualMode(props.interview ? show : empty)
   
@@ -36,14 +37,20 @@ export default function Appointment(props) {
     transition(saving)
     props.bookInterview(props.id, interview)
       .then((res, rej) => transition(show))
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        transition(savingError)
+      })
   }
 
   const delAppointment = () => {
     transition(deleting)
     props.deleteInterview(props.id)
       .then((res, rej) => transition(empty))
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        transition(deletionError)
+      })
   }
 
   return (
@@ -63,6 +70,10 @@ export default function Appointment(props) {
       {mode === deleting && <Status
         message="...deleting"
       />}
+      {mode === deletionError && <Error 
+        message="Deletion failed"
+        onClose={() => transition(show, true)}
+      />}
       {mode === edit && <Form 
         student={props.interview.student}
         interviewer={props.interview.interviewer}
@@ -73,10 +84,6 @@ export default function Appointment(props) {
       {mode === empty && <Empty 
         onAdd={() => transition(create)}
       />}
-      {mode === error && <Error 
-        message="hardcoded Error message"
-        onClose={() => console.log("onClose func")}      
-      />}
       {mode === show && <Show
         student={props.interview.student}
         interviewer={findInterviewer(props.interview.interviewer)}
@@ -85,6 +92,10 @@ export default function Appointment(props) {
       />}
       {mode === saving && <Status
         message="... saving"
+        />}
+      {mode === savingError && <Error 
+        message="Save failed"
+        onClose={() => transition(empty, true)}
       />}
       
     </article>

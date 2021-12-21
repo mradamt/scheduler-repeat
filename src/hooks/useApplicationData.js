@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { getAppointmentsForDay, getInterviewersForDay } from "helpers/selectors";
 
-import Appointment from "./Appointment";
+import Appointment from "components/Appointment";
 
 const [state, setState] = useState({
   day: "Monday",

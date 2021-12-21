@@ -5,11 +5,7 @@ import "components/Application.scss";
 
 import Appointment from "./Appointment";
 import DayList from "./DayList";
-import {
-  state,
-  setDay,
-  dailyAppointments
-} from '/hooks/useApplicationData'
+import { state, setDay, dailyAppointments } from 'hooks/useApplicationData'
 // import { getAppointmentsForDay, getInterviewersForDay } from "helpers/selectors";
 
 

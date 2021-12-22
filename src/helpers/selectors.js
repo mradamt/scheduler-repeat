@@ -9,3 +9,10 @@ export function getInterviewersForDay(state, day) {
   if (!dayObj) return []
   return dayObj.interviewers.map(id => state.interviewers[id])
 }
+
+export function getInterview(state, interview) {
+  if (!interview) return null
+  const foundInterviewer = state.interviewers[interview.interviewer]
+  if (!foundInterviewer) return []
+  return {...interview, interviewer: foundInterviewer}
+}

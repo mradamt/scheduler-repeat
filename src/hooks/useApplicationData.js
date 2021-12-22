@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import { getAppointmentsForDay, getInterviewersForDay } from "helpers/selectors";
-
-// import Appointment from "components/Appointment";
 
 export default function useApplicationData() {
   
@@ -30,11 +27,7 @@ export default function useApplicationData() {
   }, [])
   
   const setDay = day => setState({...state, day: day})
-  
-  const dailyInterviewersList = getInterviewersForDay(state, state.day)
-  
-  const dailyAppointmentList = getAppointmentsForDay(state, state.day)
-  
+    
   const bookInterview = (id, interview) => {
     const newAppointment = {...state.appointments[id], interview: {...interview}}
     const newAppointments = {...state.appointments, [id]: newAppointment}
@@ -53,8 +46,6 @@ export default function useApplicationData() {
   return {
     state,
     setDay,
-    dailyAppointmentList,
-    dailyInterviewersList,
     bookInterview,
     deleteInterview
   }

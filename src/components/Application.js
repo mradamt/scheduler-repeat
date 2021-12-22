@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";
-// import axios from "axios";
+import React from "react";
 
 import "components/Application.scss";
 
 import Appointment from "./Appointment";
 import DayList from "./DayList";
 import useApplicationData from 'hooks/useApplicationData'
+import { getAppointmentsForDay, getInterviewersForDay } from "helpers/selectors";
 
 export default function Application(props) {
   const {
     state,
     setDay,
-    dailyAppointmentList,
-    dailyInterviewersList,
     bookInterview,
     deleteInterview
   } = useApplicationData()
+  
+  const interviewersForDay = getInterviewersForDay(state, state.day)
 
-  const dailyAppointments = dailyAppointmentList
+  const appointmentsForDay = getAppointmentsForDay(state, state.day)
     .map(appointment => (
       <Appointment 
         key={appointment.id} 
         {...appointment} 
-        dailyInterviewersList={dailyInterviewersList}
+        interviewersForDay={interviewersForDay}
         bookInterview={bookInterview}
         deleteInterview={deleteInterview}
       />
@@ -52,7 +52,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         <ul>
-          {dailyAppointments}
+          {appointmentsForDay}
           <Appointment key="last" time="5pm" />
         </ul>
       </section>

@@ -47,20 +47,16 @@ export default function useApplicationData() {
   const updateSpotsRemaining = (state, id) => {
     // get dayId for day that includes id
     const day = state.days.filter(dayObj => dayObj.appointments.includes(id))[0]
-    // console.log('day', day);
     // get list of appointmentIds for that day
     const apppointmentsList = day.appointments
-    // console.log('list', apppointmentsList);
     // sum 'null' for that list of appointmentIds
     const spots = apppointmentsList.reduce((prev, cur) => {
-      // const res = state.appointments[cur].interview ? 0 : 1
-      // console.log('index:', cur, 'interview?', state.appointments[cur].interview, 'res:', res);
       return prev + (state.appointments[cur].interview ? 0 : 1)
     }, 0)
     // update state.days[dayId].spots
-    // console.log('oldspots:', day.spots);
-    // console.log('newspots:', spots);
-    
+    const newDay = {...day, spots}
+    const newDays = state.days.map(x => x.name === day.name ? newDay : x)
+    setState({...state, days: newDays})
   }
   
   return {

@@ -48,7 +48,19 @@ export default function useApplicationData() {
     interviewers: {}
   })
 
+  let connection = null;
+
   useEffect(() => {
+    connection = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
+    connection.onopen = event => {
+      connection.send("ping")
+    }
+    connection.onmessage = event => {
+      const dataObj = JSON.parse(event.data)
+      console.log(dataObj);
+      dataObj.type === SET_INTERVIEW && dispatch(JSON.parse(event.data))
+    }
+
     Promise.all([
       axios.get('/api/days'),
       axios.get('/api/appointments'),
@@ -62,6 +74,10 @@ export default function useApplicationData() {
       })
     })
   }, [])
+
+  // connection.onmessage = event => {
+  //   dispatch(JSON.parse(event.data))
+  // }
   
   const setDay = day => dispatch({type: SET_DAY, day})
     

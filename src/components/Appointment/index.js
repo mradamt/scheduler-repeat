@@ -13,39 +13,39 @@ import Show from "./Show";
 import Status from "./Status";
 
 export default function Appointment(props) {
-  const empty = "empty";
-  const show = "show";
-  const create = "create";
-  const edit = "edit";
-  const confirm = "confirm";
-  const status_saving = "status_saving";
-  const status_deleting = "status_deleting";
-  const error_onSave = "error_onSave"
-  const error_onDelete = "error_onDelete";
+  const EMPTY = "EMPTY";
+  const SHOW = "SHOW";
+  const CREATE = "CREATE";
+  const EDIT = "EDIT";
+  const CONFIRM = "CONFIRM";
+  const STATUS_SAVING = "STATUS_SAVING";
+  const STATUS_DELETING = "STATUS_DELETING";
+  const ERROR_SAVING = "ERROR_SAVING"
+  const ERROR_DELETING = "ERROR_DELETING";
 
-  const { mode, transition, back } = useVisualMode(props.interview ? show : empty)
+  const { mode, transition, back } = useVisualMode(props.interview ? SHOW : EMPTY)
   
   const save = (name, interviewer) => {
     const interview = {
       student: name,
       interviewer
     }
-    transition(status_saving)
+    transition(STATUS_SAVING)
     props.bookInterview(props.id, interview)
-      .then(() => transition(show))
+      .then(() => transition(SHOW))
       .catch(err => {
         console.log(err)
-        transition(error_onSave, true)
+        transition(ERROR_SAVING, true)
       })
   }
 
   const delAppointment = () => {
-    transition(status_deleting, true)
+    transition(STATUS_DELETING, true)
     props.deleteInterview(props.id)
-      .then(() => transition(empty))
+      .then(() => transition(EMPTY))
       .catch((err) => {
         console.log(err)
-        transition(error_onDelete, true)
+        transition(ERROR_DELETING, true)
       })
   }
 
@@ -53,43 +53,43 @@ export default function Appointment(props) {
     <article className="appointment">
       <Header time={props.time} />
 
-      {mode === empty && <Empty 
-        onAdd={() => transition(create)}
+      {mode === EMPTY && <Empty 
+        onAdd={() => transition(CREATE)}
       />}
-      {mode === show && <Show
+      {mode === SHOW && <Show
         student={props.interview.student}
         interviewerName={props.interview.interviewer.name}
-        onEdit={() => transition(edit)}
-        onDelete={() => transition(confirm)}
+        onEdit={() => transition(EDIT)}
+        onDelete={() => transition(CONFIRM)}
       />}
-      {mode === create && <Form 
+      {mode === CREATE && <Form 
         interviewers={props.interviewersForDay}
         onSave={save}
         onCancel={() => back()}
       />}
-      {mode === edit && <Form 
+      {mode === EDIT && <Form 
         student={props.interview.student}
         interviewerId={props.interview.interviewer.id}
         interviewers={props.interviewersForDay}
         onSave={save}
         onCancel={() => back()}
       />}
-      {mode === confirm && <Confirm
+      {mode === CONFIRM && <Confirm
         message="Confirm delete?"
         onConfirm={delAppointment}
         onCancel={() => back()}
       />}
-      {mode === status_saving && <Status
+      {mode === STATUS_SAVING && <Status
         message="... saving"
       />}
-      {mode === status_deleting && <Status
+      {mode === STATUS_DELETING && <Status
         message="...deleting"
       />}
-      {mode === error_onSave && <Error 
+      {mode === ERROR_SAVING && <Error 
         message="Save failed"
         onClose={() => back()}
       />}
-      {mode === error_onDelete && <Error 
+      {mode === ERROR_DELETING && <Error 
         message="Deletion failed"
         onClose={() => back()}
       />}

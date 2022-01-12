@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useEffect} from "react";
 
 import "components/Appointment/styles.scss"
 
@@ -13,6 +13,8 @@ import Show from "./Show";
 import Status from "./Status";
 
 export default function Appointment(props) {
+  const interview = props.interview
+
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -23,8 +25,13 @@ export default function Appointment(props) {
   const ERROR_SAVING = "ERROR_SAVING"
   const ERROR_DELETING = "ERROR_DELETING";
 
-  const { mode, transition, back } = useVisualMode(props.interview ? SHOW : EMPTY)
+  const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY)
   
+  useEffect(() => {
+    mode === SHOW && !interview && transition(EMPTY)
+    mode === EMPTY && interview && transition(SHOW)
+  }, [interview, mode, transition])
+
   const save = (name, interviewer) => {
     const interview = {
       student: name,
@@ -56,9 +63,9 @@ export default function Appointment(props) {
       {mode === EMPTY && <Empty 
         onAdd={() => transition(CREATE)}
       />}
-      {mode === SHOW && <Show
-        student={props.interview.student}
-        interviewerName={props.interview.interviewer.name}
+      {mode === SHOW && interview && <Show
+        student={interview.student}
+        interviewerName={interview.interviewer.name}
         onEdit={() => transition(EDIT)}
         onDelete={() => transition(CONFIRM)}
       />}
@@ -68,8 +75,8 @@ export default function Appointment(props) {
         onCancel={() => back()}
       />}
       {mode === EDIT && <Form 
-        student={props.interview.student}
-        interviewerId={props.interview.interviewer.id}
+        student={interview.student}
+        interviewerId={interview.interviewer.id}
         interviewers={props.interviewersForDay}
         onSave={save}
         onCancel={() => back()}

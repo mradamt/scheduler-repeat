@@ -5,17 +5,34 @@ const SET_DAY = 'SET_DAY'
 const SET_APPLICATION_DATA = 'SET_APPLICATION_DATA'
 const SET_INTERVIEW = 'SET_INTERVIEW'
 
+const updateSpotsRemaining = (days, appointments, id) => {
+  return days.map(day => {
+    if (day.appointments.includes(id)) {
+      day.spots = day.appointments.filter(aptId => !appointments[aptId].interview).length
+    }
+    return day
+  })
+}
+
 const reducer = (state, action) => {
   switch (action.type) {
     case SET_DAY:
-      return {...state, day: action.value}
+      return {...state, day: action.day}
 
     case SET_APPLICATION_DATA:
-      return {...state, ...action.value}
+      return {
+        ...state, 
+        days: [...action.days], 
+        appointments: {...action.appointments}, 
+        interviewers: {...action.interviewers}
+      }
 
     case SET_INTERVIEW:
-      return {}
-
+      const appointment = {...state.appointments[action.id], interview: action.interview}
+      const appointments = {...state.appointments, [action.id]: appointment}
+      const days = updateSpotsRemaining(state.days, appointments, action.id)
+      return {...state, days, appointments}
+      
     default:
       throw new Error(
         `Tried to reduce with unsupported action type: ${action.type}`
@@ -49,35 +66,15 @@ export default function useApplicationData() {
   const setDay = day => dispatch({type: SET_DAY, day})
     
   const bookInterview = (id, interview) => {
-    const appointment = {...state.appointments[id], interview: {...interview}}
-    const appointments = {...state.appointments, [id]: appointment}
-    const days = updateSpotsRemaining(appointments, id)
-    // const newState = {appointments: appointments, days: newDays}
     return axios
-      .put(`/api/appointments/${id}`, appointment)
-      .then(() => dispatch({
-        type: SET_INTERVIEW, 
-        value: {appointments, days}
-      }))
+      .put(`/api/appointments/${id}`, {...state.appointments[id], interview: {...interview}})
+      .then(() => dispatch({type: SET_INTERVIEW, id, interview}))
   };
   
   const deleteInterview = (id) => {
-    const newAppointment = {...state.appointments[id], interview: null}
-    const newAppointments = {...state.appointments, [id]: newAppointment}
-    const newState = {...state, appointments: newAppointments}
-    updateSpotsRemaining(newState, id)
     return axios
       .delete(`/api/appointments/${id}`)
-      .then(() => dispatch({type: SET_INTERVIEW, interview: null}))
-  }
-  
-  const updateSpotsRemaining = (appointments, id) => {
-    return state.days.map(day => {
-      if (day.appointments.includes(id)) {
-        day.spots = day.appointments.filter(aptId => !appointments[aptId].interview).length
-      }
-      return day
-    })
+      .then(() => dispatch({type: SET_INTERVIEW, id, interview: null}))
   }
   
   return {

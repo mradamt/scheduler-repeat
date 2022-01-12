@@ -52,14 +52,10 @@ export default function useApplicationData() {
 
   useEffect(() => {
     connection = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
-    connection.onopen = event => {
-      connection.send("ping")
-    }
-    connection.onmessage = event => {
-      const dataObj = JSON.parse(event.data)
-      console.log(dataObj);
-      dataObj.type === SET_INTERVIEW && dispatch(JSON.parse(event.data))
-    }
+      .onmessage = event => {
+        const dataObj = JSON.parse(event.data)
+        dataObj.type === SET_INTERVIEW && dispatch(dataObj)
+      }
 
     Promise.all([
       axios.get('/api/days'),

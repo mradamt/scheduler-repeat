@@ -70,10 +70,6 @@ export default function useApplicationData() {
       })
     })
   }, [])
-
-  // connection.onmessage = event => {
-  //   dispatch(JSON.parse(event.data))
-  // }
   
   const setDay = day => dispatch({type: SET_DAY, day})
     
